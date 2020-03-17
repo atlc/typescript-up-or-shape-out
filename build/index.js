@@ -27,16 +27,6 @@ var Shape = /** @class */ (function () {
         this.id = this.createID();
         this.width = width;
         this.height = height;
-        if (this.width > 600 || this.height > 600 && this.name !== 'Circle') {
-            Swal.fire({
-                icon: 'error',
-                title: "If It Don't Fit, Don't Force It.",
-                text: "Your shape's width or height was greater than 600 pixels. We reset both attributes to 150 pixels for you!",
-                footer: "<a href='https://youtu.be/Gt-5HoqtLGQ'>\"If It Don't Fit, Don't Force It\" - Kellee Patterson</a>"
-            });
-            this.width = 150;
-            this.height = 150;
-        }
     }
     Shape.prototype.createID = function () {
         return Math.random().toString(36).substr(2, 16) + "_" + Date.now().toString(36);
@@ -54,14 +44,6 @@ var Circle = /** @class */ (function (_super) {
     function Circle(radius) {
         var _this = _super.call(this, 'Circle', radius * 2, radius * 2) || this;
         _this.radius = radius;
-        if (radius > 600) {
-            Swal.fire({
-                icon: 'error',
-                title: "It's too big to be a space station.",
-                text: "Your circle's radius was greater than 300 pixels. We reset it to 125 pixels for you!"
-            });
-            _this.radius = 125;
-        }
         return _this;
     }
     Circle.prototype.area = function () {
@@ -109,21 +91,58 @@ var Square = /** @class */ (function (_super) {
 function generateRectangle() {
     var width = parseFloat(document.getElementById('inputRectangleWidth').value);
     var height = parseFloat(document.getElementById('inputRectangleHeight').value);
+    if (width > 580 || height > 580) {
+        width = 150;
+        height = 150;
+        Swal.fire({
+            icon: 'error',
+            title: "If It Don't Fit, Don't Force It.",
+            text: "Your rectangle's width or height was greater than 580 pixels. We reset both attributes to 150 pixels for you!",
+            footer: "<a href='https://youtu.be/Gt-5HoqtLGQ'>\"If It Don't Fit, Don't Force It\" - Kellee Patterson</a>"
+        });
+    }
     var newRect = new Rectangle(width, height);
     draw(newRect);
 }
 function generateSquare() {
     var length = parseFloat(document.getElementById('inputSquareSideLength').value);
+    if (length > 580) {
+        length = 150;
+        Swal.fire({
+            icon: 'error',
+            title: "If It Don't Fit, Don't Force It.",
+            text: "Your square's side length was greater than 580 pixels. We reset it to 150 pixels for you!",
+            footer: "<a href='https://youtu.be/Gt-5HoqtLGQ'>\"If It Don't Fit, Don't Force It\" - Kellee Patterson</a>"
+        });
+    }
     var newSquare = new Square(length);
     draw(newSquare);
 }
 function generateCircle() {
     var radius = parseFloat(document.getElementById('inputCircleRadius').value);
+    if (radius > 295) {
+        Swal.fire({
+            icon: 'error',
+            title: "It's too big to be a space station.",
+            text: "Your circle's radius was greater than 295 pixels. We reset it to 125 pixels for you!",
+            footer: "<a href='https://youtu.be/Gt-5HoqtLGQ'>\"If It Don't Fit, Don't Force It\" - Kellee Patterson</a>"
+        });
+        radius = 125;
+    }
     var newCircle = new Circle(radius);
     draw(newCircle);
 }
 function generateTriangle() {
     var height = parseFloat(document.getElementById('inputIsoscelesTriangleHeight').value);
+    if (height > 580) {
+        height = 150;
+        Swal.fire({
+            icon: 'error',
+            title: "Tri-again!",
+            text: "Your triangle's height was greater than 580 pixels. We reset it to 150 pixels for you!",
+            footer: "<a href='https://youtu.be/Gt-5HoqtLGQ'>\"If It Don't Fit, Don't Force It\" - Kellee Patterson</a>"
+        });
+    }
     var newTriangle = new Triangle(height);
     draw(newTriangle);
 }

@@ -22,16 +22,6 @@ class Shape {
         this.id = this.createID();
         this.width = width;
         this.height = height;
-        if (this.width > 600 || this.height > 600 && this.name !== 'Circle') {
-            Swal.fire({
-                icon: 'error',
-                title: "If It Don't Fit, Don't Force It.",
-                text: "Your shape's width or height was greater than 600 pixels. We reset both attributes to 150 pixels for you!",
-                footer: `<a href='https://youtu.be/Gt-5HoqtLGQ'>"If It Don't Fit, Don't Force It" - Kellee Patterson</a>`
-              });
-            this.width = 150;
-            this.height = 150;
-        }
     }
 
     createID(): string {
@@ -53,14 +43,6 @@ class Circle extends Shape {
     constructor(radius: number) {
         super('Circle', radius*2, radius*2);
         this.radius = radius;
-        if (radius > 600) {
-            Swal.fire({
-                icon: 'error',
-                title: "It's too big to be a space station.",
-                text: "Your circle's radius was greater than 300 pixels. We reset it to 125 pixels for you!"
-              });
-            this.radius = 125;
-        }
     }
 
     area(): number {
@@ -112,24 +94,61 @@ class Square extends Shape {
 function generateRectangle() {
     let width: number = parseFloat((<HTMLInputElement>document.getElementById('inputRectangleWidth')).value);
     let height: number = parseFloat((<HTMLInputElement>document.getElementById('inputRectangleHeight')).value);
+    if (width > 580 || height > 580) {
+        width = 150;
+        height = 150;
+        Swal.fire({
+            icon: 'error',
+            title: "If It Don't Fit, Don't Force It.",
+            text: "Your rectangle's width or height was greater than 580 pixels. We reset both attributes to 150 pixels for you!",
+            footer: `<a href='https://youtu.be/Gt-5HoqtLGQ'>"If It Don't Fit, Don't Force It" - Kellee Patterson</a>`
+        });
+    }
     let newRect: Rectangle = new Rectangle(width, height);
     draw(newRect);
 }
 
 function generateSquare() {
     let length: number = parseFloat((<HTMLInputElement>document.getElementById('inputSquareSideLength')).value);
+    if (length > 580) {
+        length = 150;
+        Swal.fire({
+            icon: 'error',
+            title: "If It Don't Fit, Don't Force It.",
+            text: "Your square's side length was greater than 580 pixels. We reset it to 150 pixels for you!",
+            footer: `<a href='https://youtu.be/Gt-5HoqtLGQ'>"If It Don't Fit, Don't Force It" - Kellee Patterson</a>`
+        });
+    }
     let newSquare: Square = new Square(length);
     draw(newSquare);
 }
 
 function generateCircle() {
     let radius: number = parseFloat((<HTMLInputElement>document.getElementById('inputCircleRadius')).value);
+    if (radius > 295) {
+        Swal.fire({
+            icon: 'error',
+            title: "It's too big to be a space station.",
+            text: "Your circle's radius was greater than 295 pixels. We reset it to 125 pixels for you!",
+            footer: `<a href='https://youtu.be/Gt-5HoqtLGQ'>"If It Don't Fit, Don't Force It" - Kellee Patterson</a>`
+          });
+        radius = 125;
+    }
     let newCircle: Circle = new Circle(radius);
     draw(newCircle);
 }
 
 function generateTriangle() {
     let height: number = parseFloat((<HTMLInputElement>document.getElementById('inputIsoscelesTriangleHeight')).value);
+    if (height > 580) {
+        height = 150;
+        Swal.fire({
+            icon: 'error',
+            title: "Tri-again!",
+            text: "Your triangle's height was greater than 580 pixels. We reset it to 150 pixels for you!",
+            footer: `<a href='https://youtu.be/Gt-5HoqtLGQ'>"If It Don't Fit, Don't Force It" - Kellee Patterson</a>`
+        });
+    }
     let newTriangle: Triangle = new Triangle(height);
     draw(newTriangle);
 }
