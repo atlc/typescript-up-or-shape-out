@@ -11,17 +11,25 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var canvas = document.getElementById('shapeCanvas'); //HTMLCanvasElement
-var addRectangleButton = document.getElementById('addRectangleButton'); //HTMLButtonElement
-var addSquareButton = document.getElementById('addSquareButton'); //HTMLButtonElement
-var addCircleButton = document.getElementById('addCircleButton'); //HTMLButtonElement
-var addIsocelesButton = document.getElementById('addIsocelesButton'); //HTMLButtonElement
+var canvas = document.getElementById('shapeCanvas');
+var addRectangleButton = document.getElementById('addRectangleButton');
+addRectangleButton.addEventListener('click', generateRectangle);
+var addSquareButton = document.getElementById('addSquareButton');
+addSquareButton.addEventListener('click', generateSquare);
+var addCircleButton = document.getElementById('addCircleButton');
+addCircleButton.addEventListener('click', generateCircle);
+var addIsocelesButton = document.getElementById('addIsocelesButton');
+addIsocelesButton.addEventListener('click', generateTriangle);
 var Shape = /** @class */ (function () {
     function Shape(name, width, height) {
         this.name = name;
+        this.id = this.createID();
         this.width = width;
         this.height = height;
     }
+    Shape.prototype.createID = function () {
+        return Math.random().toString(36).substr(2, 16) + "_" + Date.now().toString(36);
+    };
     Shape.prototype.area = function () {
         return (this.width * this.height);
     };
@@ -79,36 +87,47 @@ var Square = /** @class */ (function (_super) {
     }
     return Square;
 }(Shape));
-addRectangleButton.addEventListener('click', generateRectangle);
-addSquareButton.addEventListener('click', function () { });
-addCircleButton.addEventListener('click', function () { });
-addIsocelesButton.addEventListener('click', function () { });
 function generateRectangle() {
     var width = parseFloat(document.getElementById('inputRectangleWidth').value);
     var height = parseFloat(document.getElementById('inputRectangleHeight').value);
     var newRect = new Rectangle(width, height);
     draw(newRect);
     describeShape(newRect); // Remove later, strictly for debugging
-    console.log(newRect);
+}
+function generateSquare() {
+    var length = parseFloat(document.getElementById('inputSquareSideLength').value);
+    var newSquare = new Square(length);
+    draw(newSquare);
+    describeShape(newSquare);
+}
+function generateCircle() {
+    var radius = parseFloat(document.getElementById('inputCircleRadius').value);
+    var newCircle = new Circle(radius);
+    draw(newCircle);
+    describeShape(newCircle);
+}
+function generateTriangle() {
+    var height = parseFloat(document.getElementById('inputIsoscelesTriangleHeight').value);
+    var newTriangle = new Triangle(height);
+    draw(newTriangle);
+    describeShape(newTriangle);
 }
 function draw(shape) {
     // draw shit
+    // `<div id="${shape.id}"></div>`
     // shapeDiv.addEventListener('click', describeShape(shape));
     // shapeDiv.addEventListener('dblclick', removeShape(shape));
 }
 function describeShape(shape) {
-    var infoShapeName = document.getElementById('infoShapeName');
-    var infoWidth = document.getElementById('infoWidth');
-    var infoHeight = document.getElementById('infoHeight');
-    var infoRadius = document.getElementById('infoRadius');
-    var infoArea = document.getElementById('infoArea');
-    var infoPerimeter = document.getElementById('infoPerimeter');
-    infoShapeName.value = shape.name;
-    infoWidth.value = shape.width + " px";
-    infoHeight.value = shape.height + " px";
-    infoRadius.value = (shape.radius) ? shape.radius + " px" : ' ';
-    infoArea.value = shape.area().toLocaleString() + " px";
-    infoPerimeter.value = shape.perimeter().toLocaleString() + " px";
+    document.getElementById('infoShapeName').value = shape.name;
+    document.getElementById('infoShapeID').value = shape.id;
+    document.getElementById('infoWidth').value = shape.width + " px";
+    document.getElementById('infoHeight').value = shape.height + " px";
+    document.getElementById('infoRadius').value = (shape.radius) ? shape.radius + " px" : ' ';
+    document.getElementById('infoArea').value = shape.area().toLocaleString() + " px";
+    document.getElementById('infoPerimeter').value = shape.perimeter().toLocaleString() + " px";
 }
 function removeShape(shape) {
+    shape.parentElement.removeChild(shape);
+    // document.getElementById(`${shape.id}`).parentElement.removeChild(document.getElementById(`${shape.id}`))
 }

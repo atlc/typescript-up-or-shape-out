@@ -1,19 +1,33 @@
-let canvas:HTMLElement = document.getElementById('shapeCanvas'); //HTMLCanvasElement
+let canvas:HTMLElement = <HTMLCanvasElement>document.getElementById('shapeCanvas');
 
-const addRectangleButton:HTMLElement = document.getElementById('addRectangleButton'); //HTMLButtonElement
-const addSquareButton:HTMLElement = document.getElementById('addSquareButton'); //HTMLButtonElement
-const addCircleButton:HTMLElement = document.getElementById('addCircleButton'); //HTMLButtonElement
-const addIsocelesButton:HTMLElement = document.getElementById('addIsocelesButton'); //HTMLButtonElement
+const addRectangleButton:HTMLElement = <HTMLButtonElement>document.getElementById('addRectangleButton');
+addRectangleButton.addEventListener('click', generateRectangle);
+
+const addSquareButton:HTMLElement = <HTMLButtonElement>document.getElementById('addSquareButton');
+addSquareButton.addEventListener('click', generateSquare);
+
+const addCircleButton:HTMLElement = <HTMLButtonElement>document.getElementById('addCircleButton');
+addCircleButton.addEventListener('click', generateCircle);
+
+const addIsocelesButton:HTMLElement = <HTMLButtonElement>document.getElementById('addIsocelesButton');
+addIsocelesButton.addEventListener('click', generateTriangle);
+
 
 class Shape {
     name: string;
+    id: string;
     width: number;
     height: number;
 
     constructor(name: string, width?: number, height?: number) {
         this.name = name;
+        this.id = this.createID();
         this.width = width;
         this.height = height;
+    }
+
+    createID(): string {
+        return `${Math.random().toString(36).substr(2, 16)}_${Date.now().toString(36)}`;
     }
 
     area(): number {
@@ -79,42 +93,53 @@ class Square extends Shape {
     }
 }
 
-addRectangleButton.addEventListener('click', generateRectangle);
-addSquareButton.addEventListener('click', function() {  });
-addCircleButton.addEventListener('click', function() {  });
-addIsocelesButton.addEventListener('click', function() {  });
-
 function generateRectangle() {
     let width: number = parseFloat((<HTMLInputElement>document.getElementById('inputRectangleWidth')).value);
     let height: number = parseFloat((<HTMLInputElement>document.getElementById('inputRectangleHeight')).value);
     let newRect: Rectangle = new Rectangle(width, height);
     draw(newRect);
     describeShape(newRect); // Remove later, strictly for debugging
-    console.log(newRect)
+}
+
+function generateSquare() {
+    let length: number = parseFloat((<HTMLInputElement>document.getElementById('inputSquareSideLength')).value);
+    let newSquare: Square = new Square(length);
+    draw(newSquare);
+    describeShape(newSquare);
+}
+
+function generateCircle() {
+    let radius: number = parseFloat((<HTMLInputElement>document.getElementById('inputCircleRadius')).value);
+    let newCircle: Circle = new Circle(radius);
+    draw(newCircle);
+    describeShape(newCircle);
+}
+
+function generateTriangle() {
+    let height: number = parseFloat((<HTMLInputElement>document.getElementById('inputIsoscelesTriangleHeight')).value);
+    let newTriangle: Triangle = new Triangle(height);
+    draw(newTriangle);
+    describeShape(newTriangle);
 }
 
 function draw(shape) {
     // draw shit
+    // `<div id="${shape.id}"></div>`
     // shapeDiv.addEventListener('click', describeShape(shape));
     // shapeDiv.addEventListener('dblclick', removeShape(shape));
 }
 
 function describeShape(shape) {
-    let infoShapeName:HTMLElement = document.getElementById('infoShapeName');
-    let infoWidth:HTMLElement = document.getElementById('infoWidth');
-    let infoHeight:HTMLElement = document.getElementById('infoHeight');
-    let infoRadius:HTMLElement = document.getElementById('infoRadius');
-    let infoArea:HTMLElement = document.getElementById('infoArea');
-    let infoPerimeter:HTMLElement = document.getElementById('infoPerimeter');
-
-    (<HTMLInputElement>infoShapeName).value = shape.name;
-    (<HTMLInputElement>infoWidth).value = `${shape.width} px`;
-    (<HTMLInputElement>infoHeight).value = `${shape.height} px`;
-    (<HTMLInputElement>infoRadius).value = (shape.radius) ? `${shape.radius} px` : ' ';
-    (<HTMLInputElement>infoArea).value = `${shape.area().toLocaleString()} px`;
-    (<HTMLInputElement>infoPerimeter).value = `${shape.perimeter().toLocaleString()} px`;
+    (<HTMLInputElement>document.getElementById('infoShapeName')).value = shape.name;
+    (<HTMLInputElement>document.getElementById('infoShapeID')).value = shape.id;
+    (<HTMLInputElement>document.getElementById('infoWidth')).value = `${shape.width} px`;
+    (<HTMLInputElement>document.getElementById('infoHeight')).value = `${shape.height} px`;
+    (<HTMLInputElement>document.getElementById('infoRadius')).value = (shape.radius) ? `${shape.radius} px` : ' ';
+    (<HTMLInputElement>document.getElementById('infoArea')).value = `${shape.area().toLocaleString()} px`;
+    (<HTMLInputElement>document.getElementById('infoPerimeter')).value = `${shape.perimeter().toLocaleString()} px`;
 }
 
 function removeShape(shape) {
-
+    shape.parentElement.removeChild(shape);
+    // document.getElementById(`${shape.id}`).parentElement.removeChild(document.getElementById(`${shape.id}`))
 }
