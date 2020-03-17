@@ -27,7 +27,7 @@ var Shape = /** @class */ (function () {
         this.id = this.createID();
         this.width = width;
         this.height = height;
-        if (width > 600 || height > 600) {
+        if (this.width > 600 || this.height > 600 && this.name !== 'Circle') {
             Swal.fire({
                 icon: 'error',
                 title: "If It Don't Fit, Don't Force It.",
