@@ -11,14 +11,16 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var Swal;
+// let canvas: HTMLElement = <HTMLCanvasElement>document.getElementById('shapeCanvas');
 var canvas = document.getElementById('shapeCanvas');
 var addRectangleButton = document.getElementById('addRectangleButton');
-addRectangleButton.addEventListener('click', generateRectangle);
 var addSquareButton = document.getElementById('addSquareButton');
-addSquareButton.addEventListener('click', generateSquare);
 var addCircleButton = document.getElementById('addCircleButton');
-addCircleButton.addEventListener('click', generateCircle);
 var addIsocelesButton = document.getElementById('addIsocelesButton');
+addRectangleButton.addEventListener('click', generateRectangle);
+addSquareButton.addEventListener('click', generateSquare);
+addCircleButton.addEventListener('click', generateCircle);
 addIsocelesButton.addEventListener('click', generateTriangle);
 var Shape = /** @class */ (function () {
     function Shape(name, width, height) {
@@ -26,6 +28,16 @@ var Shape = /** @class */ (function () {
         this.id = this.createID();
         this.width = width;
         this.height = height;
+        if (width > 600 || height > 600) {
+            Swal.fire({
+                icon: 'error',
+                title: "If It Don't Fit, Don't Force It.",
+                text: "Your shape's width or height was greater than 600 pixels. We reset both attributes to 150 pixels for you!",
+                footer: "<a href='https://youtu.be/Gt-5HoqtLGQ'>\"If It Don't Fit, Don't Force It\" - Kellee Patterson</a>"
+            });
+            this.width = 150;
+            this.height = 150;
+        }
     }
     Shape.prototype.createID = function () {
         return Math.random().toString(36).substr(2, 16) + "_" + Date.now().toString(36);
@@ -43,6 +55,14 @@ var Circle = /** @class */ (function (_super) {
     function Circle(radius) {
         var _this = _super.call(this, 'Circle', radius * 2, radius * 2) || this;
         _this.radius = radius;
+        if (radius > 600) {
+            Swal.fire({
+                icon: 'error',
+                title: "It's too big to be a space station.",
+                text: "Your circle's radius was greater than 300 pixels. We reset it to 125 pixels for you!"
+            });
+            _this.radius = 125;
+        }
         return _this;
     }
     Circle.prototype.area = function () {
@@ -92,31 +112,39 @@ function generateRectangle() {
     var height = parseFloat(document.getElementById('inputRectangleHeight').value);
     var newRect = new Rectangle(width, height);
     draw(newRect);
-    describeShape(newRect); // Remove later, strictly for debugging
 }
 function generateSquare() {
     var length = parseFloat(document.getElementById('inputSquareSideLength').value);
     var newSquare = new Square(length);
     draw(newSquare);
-    describeShape(newSquare);
 }
 function generateCircle() {
     var radius = parseFloat(document.getElementById('inputCircleRadius').value);
     var newCircle = new Circle(radius);
     draw(newCircle);
-    describeShape(newCircle);
 }
 function generateTriangle() {
     var height = parseFloat(document.getElementById('inputIsoscelesTriangleHeight').value);
     var newTriangle = new Triangle(height);
     draw(newTriangle);
-    describeShape(newTriangle);
 }
 function draw(shape) {
-    // draw shit
-    // `<div id="${shape.id}"></div>`
-    // shapeDiv.addEventListener('click', describeShape(shape));
-    // shapeDiv.addEventListener('dblclick', removeShape(shape));
+    var shapeDiv = document.createElement('div');
+    shapeDiv.id = "" + shape.id;
+    shapeDiv.className = "shape " + shape.name.toLowerCase();
+    shapeDiv.style.top = Math.floor(Math.random() * (600 - 1 - shape.height)) + "px";
+    shapeDiv.style.left = Math.floor(Math.random() * (600 - 1 - shape.width)) + "px";
+    if (shape.name === 'Triangle') {
+        shapeDiv.style.borderTop = shape.height + "px solid yellow";
+        shapeDiv.style.borderRight = shape.height + "px solid transparent";
+    }
+    else {
+        shapeDiv.style.width = shape.width + "px";
+        shapeDiv.style.height = shape.height + "px";
+    }
+    shapeDiv.addEventListener('click', function () { describeShape(shape); });
+    shapeDiv.addEventListener('dblclick', function () { removeShape(shape); });
+    canvas.append(shapeDiv);
 }
 function describeShape(shape) {
     document.getElementById('infoShapeName').value = shape.name;
@@ -128,6 +156,6 @@ function describeShape(shape) {
     document.getElementById('infoPerimeter').value = shape.perimeter().toLocaleString() + " px";
 }
 function removeShape(shape) {
-    shape.parentElement.removeChild(shape);
-    // document.getElementById(`${shape.id}`).parentElement.removeChild(document.getElementById(`${shape.id}`))
+    var shapeID = document.getElementById(shape.id);
+    shapeID.parentElement.removeChild(shapeID);
 }

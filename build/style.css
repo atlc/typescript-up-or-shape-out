@@ -2,11 +2,9 @@ html {
     background-color:hsl(0, 0%, 21%);
 }
 
-.columns {
-    margin: 5px 5px;
-}
-
 #shapeCanvas {
+    width: 600px;
+    height: 600px;
     border: 4px white solid;
 }
 
@@ -28,6 +26,42 @@ html {
 #sidePanel > div > input {
     width: 80%;
     text-align: center;
+}
+
+.columns {
+    margin: 5px 5px;
+}
+
+.shape {
+    position: absolute;
+}
+
+.circle {
+    background-color: purple;
+    border-radius: 50%;
+    border: 3px white solid;
+}
+
+.square {
+    background-color: red;
+    border: 3px white solid;
+
+}
+
+.triangle {
+    width: 0;
+    height: 0;
+}
+
+.rectangle {
+    border: 3px white solid;
+    background-color: green;
+}
+
+.label.is-large {
+    text-transform: uppercase;
+    text-decoration: underline;
+    margin-bottom: 15px;
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */

@@ -1,17 +1,16 @@
-let canvas:HTMLElement = <HTMLCanvasElement>document.getElementById('shapeCanvas');
+let Swal: any;
+// let canvas: HTMLElement = <HTMLCanvasElement>document.getElementById('shapeCanvas');
+let canvas: HTMLElement = document.getElementById('shapeCanvas');
 
-const addRectangleButton:HTMLElement = <HTMLButtonElement>document.getElementById('addRectangleButton');
+const addRectangleButton: HTMLElement = <HTMLButtonElement>document.getElementById('addRectangleButton');
+const addSquareButton: HTMLElement = <HTMLButtonElement>document.getElementById('addSquareButton');
+const addCircleButton: HTMLElement = <HTMLButtonElement>document.getElementById('addCircleButton');
+const addIsocelesButton: HTMLElement = <HTMLButtonElement>document.getElementById('addIsocelesButton');
+
 addRectangleButton.addEventListener('click', generateRectangle);
-
-const addSquareButton:HTMLElement = <HTMLButtonElement>document.getElementById('addSquareButton');
 addSquareButton.addEventListener('click', generateSquare);
-
-const addCircleButton:HTMLElement = <HTMLButtonElement>document.getElementById('addCircleButton');
 addCircleButton.addEventListener('click', generateCircle);
-
-const addIsocelesButton:HTMLElement = <HTMLButtonElement>document.getElementById('addIsocelesButton');
 addIsocelesButton.addEventListener('click', generateTriangle);
-
 
 class Shape {
     name: string;
@@ -24,6 +23,16 @@ class Shape {
         this.id = this.createID();
         this.width = width;
         this.height = height;
+        if (width > 600 || height > 600) {
+            Swal.fire({
+                icon: 'error',
+                title: "If It Don't Fit, Don't Force It.",
+                text: "Your shape's width or height was greater than 600 pixels. We reset both attributes to 150 pixels for you!",
+                footer: `<a href='https://youtu.be/Gt-5HoqtLGQ'>"If It Don't Fit, Don't Force It" - Kellee Patterson</a>`
+              });
+            this.width = 150;
+            this.height = 150;
+        }
     }
 
     createID(): string {
@@ -45,6 +54,14 @@ class Circle extends Shape {
     constructor(radius: number) {
         super('Circle', radius*2, radius*2);
         this.radius = radius;
+        if (radius > 600) {
+            Swal.fire({
+                icon: 'error',
+                title: "It's too big to be a space station.",
+                text: "Your circle's radius was greater than 300 pixels. We reset it to 125 pixels for you!"
+              });
+            this.radius = 125;
+        }
     }
 
     area(): number {
@@ -98,35 +115,44 @@ function generateRectangle() {
     let height: number = parseFloat((<HTMLInputElement>document.getElementById('inputRectangleHeight')).value);
     let newRect: Rectangle = new Rectangle(width, height);
     draw(newRect);
-    describeShape(newRect); // Remove later, strictly for debugging
 }
 
 function generateSquare() {
     let length: number = parseFloat((<HTMLInputElement>document.getElementById('inputSquareSideLength')).value);
     let newSquare: Square = new Square(length);
     draw(newSquare);
-    describeShape(newSquare);
 }
 
 function generateCircle() {
     let radius: number = parseFloat((<HTMLInputElement>document.getElementById('inputCircleRadius')).value);
     let newCircle: Circle = new Circle(radius);
     draw(newCircle);
-    describeShape(newCircle);
 }
 
 function generateTriangle() {
     let height: number = parseFloat((<HTMLInputElement>document.getElementById('inputIsoscelesTriangleHeight')).value);
     let newTriangle: Triangle = new Triangle(height);
     draw(newTriangle);
-    describeShape(newTriangle);
 }
 
 function draw(shape) {
-    // draw shit
-    // `<div id="${shape.id}"></div>`
-    // shapeDiv.addEventListener('click', describeShape(shape));
-    // shapeDiv.addEventListener('dblclick', removeShape(shape));
+    let shapeDiv:HTMLDivElement = document.createElement('div');
+    shapeDiv.id = `${shape.id}`;
+    shapeDiv.className = `shape ${shape.name.toLowerCase()}`;
+    shapeDiv.style.top = `${Math.floor(Math.random() * (600 - 1 - shape.height))}px`;
+    shapeDiv.style.left = `${Math.floor(Math.random() * (600 - 1 - shape.width))}px`;
+
+    if (shape.name === 'Triangle') {
+        shapeDiv.style.borderTop = `${shape.height}px solid yellow`;
+        shapeDiv.style.borderRight = `${shape.height}px solid transparent`;
+    } else {
+        shapeDiv.style.width = `${shape.width}px`;
+        shapeDiv.style.height = `${shape.height}px`;    
+    }
+
+    shapeDiv.addEventListener('click', function() { describeShape(shape) });
+    shapeDiv.addEventListener('dblclick', function() { removeShape(shape) });
+    canvas.append(shapeDiv);
 }
 
 function describeShape(shape) {
@@ -140,6 +166,6 @@ function describeShape(shape) {
 }
 
 function removeShape(shape) {
-    shape.parentElement.removeChild(shape);
-    // document.getElementById(`${shape.id}`).parentElement.removeChild(document.getElementById(`${shape.id}`))
+    let shapeID = document.getElementById(shape.id);
+    shapeID.parentElement.removeChild(shapeID);
 }
