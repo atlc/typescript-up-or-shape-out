@@ -1,5 +1,4 @@
 let Swal: any;
-// let canvas: HTMLElement = <HTMLCanvasElement>document.getElementById('shapeCanvas');
 let canvas: HTMLElement = document.getElementById('shapeCanvas');
 
 const addRectangleButton: HTMLElement = <HTMLButtonElement>document.getElementById('addRectangleButton');
@@ -160,7 +159,7 @@ function describeShape(shape) {
     (<HTMLInputElement>document.getElementById('infoShapeID')).value = shape.id;
     (<HTMLInputElement>document.getElementById('infoWidth')).value = `${shape.width} px`;
     (<HTMLInputElement>document.getElementById('infoHeight')).value = `${shape.height} px`;
-    (<HTMLInputElement>document.getElementById('infoRadius')).value = (shape.radius) ? `${shape.radius} px` : ' ';
+    (<HTMLInputElement>document.getElementById('infoRadius')).value = (shape.radius) ? `${shape.radius} px` : 'N/A';
     (<HTMLInputElement>document.getElementById('infoArea')).value = `${shape.area().toLocaleString()} px`;
     (<HTMLInputElement>document.getElementById('infoPerimeter')).value = `${shape.perimeter().toLocaleString()} px`;
 }

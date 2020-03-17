@@ -12,7 +12,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var Swal;
-// let canvas: HTMLElement = <HTMLCanvasElement>document.getElementById('shapeCanvas');
 var canvas = document.getElementById('shapeCanvas');
 var addRectangleButton = document.getElementById('addRectangleButton');
 var addSquareButton = document.getElementById('addSquareButton');
@@ -151,7 +150,7 @@ function describeShape(shape) {
     document.getElementById('infoShapeID').value = shape.id;
     document.getElementById('infoWidth').value = shape.width + " px";
     document.getElementById('infoHeight').value = shape.height + " px";
-    document.getElementById('infoRadius').value = (shape.radius) ? shape.radius + " px" : ' ';
+    document.getElementById('infoRadius').value = (shape.radius) ? shape.radius + " px" : 'N/A';
     document.getElementById('infoArea').value = shape.area().toLocaleString() + " px";
     document.getElementById('infoPerimeter').value = shape.perimeter().toLocaleString() + " px";
 }

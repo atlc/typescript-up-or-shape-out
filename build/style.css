@@ -3,6 +3,7 @@ html {
 }
 
 #shapeCanvas {
+    position: relative;
     width: 600px;
     height: 600px;
     border: 4px white solid;
