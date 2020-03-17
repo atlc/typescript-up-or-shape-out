@@ -11,30 +11,52 @@
 <body>
     <div class="columns">
         <div class="column field has-addons">
-            <p class="control"><button class="button is-link">Insert Rectangle</button></p>
+            <p class="control"><button id="addRectangleButton" class="button is-link">Add Rectangle ▬</button></p>
             <div class="control">
-                <input type="text" class="input has-background-grey-lighter" placeholder="Width">
+                <input id="inputRectangleWidth" type="text" class="input has-background-white-ter has-text-black" placeholder="Width">
             </div>
             <div class="control">
-                <input type="text" class="input has-background-grey-lighter" placeholder="Height">
-            </div>
-        </div>
-        <div class="column field has-addons">
-            <p class="control"><button class="button is-info">Insert Square</button></p>
-            <div class="control">
-                <input type="text" class="input has-background-grey-lighter" placeholder="Side length">
+                <input id="inputRectangleHeight" type="text" class="input has-background-white-ter has-text-black" placeholder="Height">
             </div>
         </div>
         <div class="column field has-addons">
-            <p class="control"><button class="button is-primary">Insert Circle</button></p>
+            <p class="control"><button id="addSquareButton" class="button is-info">Add Square ■</button></p>
             <div class="control">
-                <input type="text" class="input has-background-grey-lighter" placeholder="Radius">
+                <input id="inputSquareSideLength" type="text" class="input has-background-white-ter has-text-black" placeholder="Side length">
             </div>
         </div>
         <div class="column field has-addons">
-            <p class="control"><button class="button is-success">Insert Isoceles Right Triangle</button></p>
+            <p class="control"><button id="addCircleButton" class="button is-primary">Add Circle ●</button></p>
             <div class="control">
-                <input type="text" class="input has-background-grey-lighter" placeholder="Height">
+                <input id="inputCircleRadius" type="text" class="input has-background-white-ter has-text-black" placeholder="Radius">
+            </div>
+        </div>
+        <div class="column field has-addons">
+            <p class="control"><button id="addIsocelesButton" class="button is-success">Add Isosc. Right Triangle 🞁</button></p>
+            <div class="control">
+                <input id="inputIsoscelesTriangleHeight" type="text" class="input has-background-white-ter has-text-black" placeholder="Height">
+            </div>
+        </div>
+    </div>
+    <div class="columns is-mobile is-centered">
+        <canvas id="shapeCanvas" width="600" height="600"></canvas>
+        <div id="sidePanel">
+            <div class="field">
+                <label class="label is-large">Stats</label>
+            </div>
+            <div class="field">
+                <label class="label">Shape Name</label>
+                <input id="infoShapeName" type="text" class="input" disabled placeholder="Shape Name">
+                <label class="label">Width</label>
+                <input id="infoWidth" type="text" class="input" disabled placeholder="Width">
+                <label class="label">Height</label>
+                <input id="infoHeight" type="text" class="input" disabled placeholder="Height">
+                <label class="label">Radius</label>
+                <input id="infoRadius" type="text" class="input" disabled placeholder="Radius">
+                <label class="label">Area</label>
+                <input id="infoArea" type="text" class="input" disabled placeholder="Area">
+                <label class="label">Perimeter</label>
+                <input id="infoPerimeter" type="text" class="input" disabled placeholder="Perimeter">
             </div>
         </div>
     </div>
