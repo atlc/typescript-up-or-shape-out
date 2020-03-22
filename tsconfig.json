@@ -3,6 +3,10 @@
       "target": "es6",
       "module": "commonjs",
     },
+    "typedocOptions": {
+      "mode": "modules",
+      "out": "docs"
+    },
     "include": ["src/**/*.ts"],
     "exclude": ["node_modules"],
     "outDir": "build"
