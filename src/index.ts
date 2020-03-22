@@ -1,30 +1,26 @@
-let Swal: any;
-let canvas: HTMLElement = document.getElementById('shapeCanvas');
-
-const addRectangleButton: HTMLElement = <HTMLButtonElement>document.getElementById('addRectangleButton');
-const addSquareButton: HTMLElement = <HTMLButtonElement>document.getElementById('addSquareButton');
-const addCircleButton: HTMLElement = <HTMLButtonElement>document.getElementById('addCircleButton');
-const addIsocelesButton: HTMLElement = <HTMLButtonElement>document.getElementById('addIsocelesButton');
-
-addRectangleButton.addEventListener('click', generateRectangle);
-addSquareButton.addEventListener('click', generateSquare);
-addCircleButton.addEventListener('click', generateCircle);
-addIsocelesButton.addEventListener('click', generateTriangle);
+declare let Swal: any;
+document.querySelector('#addRectangleButton').addEventListener('click', () =>  new Rectangle(0,0));
+document.querySelector('#addSquareButton').addEventListener('click', () =>  new Square(0,0));
+document.querySelector('#addCircleButton').addEventListener('click', () => new Circle(0,1,2));
+document.querySelector('#addIsocelesButton').addEventListener('click', () =>  new Triangle(0,0));
 
 class Shape {
     name: string;
-    id: string;
+    div: HTMLElement;
+    uuid: string;
     width: number;
     height: number;
+    radius: number;
 
-    constructor(name: string, width?: number, height?: number) {
+    constructor(name: string, width?: number, height?: number, radius?: number) {
         this.name = name;
-        this.id = this.createID();
+        this.uuid = this.createUUID();
         this.width = width;
         this.height = height;
+        this.radius = radius;
     }
 
-    createID(): string {
+    createUUID(): string {
         return `${Math.random().toString(36).substr(2, 16)}_${Date.now().toString(36)}`;
     }
 
@@ -35,14 +31,56 @@ class Shape {
     perimeter(): number {
         return ((this.width * 2) + (this.height * 2));
     }
+
+    describeShape() {
+        (<HTMLInputElement>document.querySelector('#infoShapeName')).value = this.name;
+        (<HTMLInputElement>document.querySelector('#infoShapeID')).value = this.uuid;
+        (<HTMLInputElement>document.querySelector('#infoWidth')).value = (this.width) ? `${this.width} px` : `${this.radius*2} px`;
+        (<HTMLInputElement>document.querySelector('#infoHeight')).value = (this.height) ? `${this.height} px` : `${this.radius*2} px`;
+        (<HTMLInputElement>document.querySelector('#infoArea')).value = `${this.area().toLocaleString()} px`;
+        (<HTMLInputElement>document.querySelector('#infoPerimeter')).value = `${this.perimeter().toLocaleString()} px`;
+        if (this.name === 'Triangle') {
+            document.querySelector('#radiusLabel').textContent = "Hypotenuse";
+            let hypotenuse: number = (this.height * Math.SQRT2);
+            (<HTMLInputElement>document.querySelector('#infoRadius')).value = `${Math.round(hypotenuse)} px`;
+        } else {
+            document.querySelector('#radiusLabel').textContent = "Radius";
+            (<HTMLInputElement>document.querySelector('#infoRadius')).value = (this.radius) ? `${this.radius} px` : '4 sides can\'t make a circle :(';
+        }
+    }
+
+    drawShapeElement() {
+        this.div = document.createElement('div');
+        this.div.id = `${this.uuid}`;
+        this.div.className = `shape ${this.name.toLowerCase()}`;
+        this.div.style.top = `${Math.floor(Math.random() * (600 - 1 - this.height))}px`;
+        this.div.style.left = `${Math.floor(Math.random() * (600 - 1 - this.width))}px`;
+    
+        if (this.name === 'Triangle') {
+            this.div.style.borderTop = `${this.height}px solid yellow`;
+            this.div.style.borderRight = `${this.height}px solid transparent`;
+        } else {
+            this.div.style.width = `${this.width}px`;
+            this.div.style.height = `${this.height}px`;    
+        }
+    
+        document.querySelector('#shapeCanvas').appendChild(this.div);
+        this.div.addEventListener('click', () => this.describeShape());
+        this.div.addEventListener('dblclick', () => this.removeShape());
+    }
+
+    removeShape() {
+        this.div.parentElement.removeChild(this.div);
+    }
 }
 
 class Circle extends Shape {
-    radius: number;
-
-    constructor(radius: number) {
-        super('Circle', radius*2, radius*2);
-        this.radius = radius;
+     constructor(width: number, height: number, radius: number) {
+        super('Circle', width, height, radius);
+        this.radius = parseFloat((<HTMLInputElement>document.querySelector('#inputCircleRadius')).value);
+        this.width = (this.radius * 2);
+        this.height = (this.radius * 2);
+        this.validateShapeDimensions();
     }
 
     area(): number {
@@ -52,14 +90,29 @@ class Circle extends Shape {
     perimeter(): number {
         return (Math.floor((Math.PI * this.radius * 2)));
     }
+
+    validateShapeDimensions() {
+        if (this.radius > 295) {
+            this.radius %= 295;
+            this.width = (this.radius * 2);
+            this.height = (this.radius * 2);
+            Swal.fire({
+                icon: 'error',
+                title: "It's too big to be a space station.",
+                text: "Your circle's radius was greater than 295 pixels. We squeezed it a little for you!",
+                footer: `<a href='https://youtu.be/Gt-5HoqtLGQ'>"If It Don't Fit, Don't Force It" - Kellee Patterson</a>`
+            });
+        }
+        this.drawShapeElement();
+    }
 }
 
 class Triangle extends Shape {
-    height: number;
-
-    constructor(height: number) {
-        super('Triangle', height, height);
-        this.height = height;
+    constructor(height: number, width: number) {
+        super('Triangle', width, height, undefined);
+        this.width = parseFloat((<HTMLInputElement>document.querySelector('#inputIsoscelesTriangleHeight')).value);
+        this.height = this.width;
+        this.validateShapeDimensions();
     }
 
     area(): number {
@@ -69,121 +122,64 @@ class Triangle extends Shape {
     perimeter(): number {
         return (Math.floor((2 * this.height) + (Math.SQRT2 * this.height)));
     }
+
+    validateShapeDimensions() {
+        if (this.height > 580) {
+            this.height %= 580;
+            this.width = this.height;
+            Swal.fire({
+                icon: 'error',
+                title: "Tri-again!",
+                text: "Your triangle's height was greater than 580 pixels. We shrunk it for you!",
+                footer: `<a href='https://youtu.be/Gt-5HoqtLGQ'>"If It Don't Fit, Don't Force It" - Kellee Patterson</a>`
+            });
+        }
+        this.drawShapeElement();
+    }
 }
 
 class Rectangle extends Shape {
-    width: number;
-    height: number;
-
     constructor(width: number, height: number) {
-        super('Rectangle', width, height);
-        this.width = width;
-        this.height = height;
+        super('Rectangle', width, height, undefined);
+        this.width = parseFloat((<HTMLInputElement>document.querySelector('#inputRectangleWidth')).value);
+        this.height = parseFloat((<HTMLInputElement>document.querySelector('#inputRectangleHeight')).value);
+        this.validateShapeDimensions();
+    }
+
+    validateShapeDimensions() {
+        if (this.width > 580 || this.height > 580) {
+            this.width %= 580;
+            this.height %= 580;
+            Swal.fire({
+                icon: 'error',
+                title: "If It Don't Fit, Don't Force It.",
+                text: "Your rectangle's width or height was greater than 580 pixels. We trimmed some sides off for you!",
+                footer: `<a href='https://youtu.be/Gt-5HoqtLGQ'>"If It Don't Fit, Don't Force It" - Kellee Patterson</a>`
+            });
+        }
+        this.drawShapeElement();
     }
 }
 
 class Square extends Shape {
-    sideLength: number;
-
-    constructor(length: number) {
-        super('Square', length, length);
-        this.sideLength = length;
-    }
-}
-
-function generateRectangle() {
-    let width: number = parseFloat((<HTMLInputElement>document.getElementById('inputRectangleWidth')).value);
-    let height: number = parseFloat((<HTMLInputElement>document.getElementById('inputRectangleHeight')).value);
-    if (width > 580 || height > 580) {
-        width = 150;
-        height = 150;
-        Swal.fire({
-            icon: 'error',
-            title: "If It Don't Fit, Don't Force It.",
-            text: "Your rectangle's width or height was greater than 580 pixels. We reset both attributes to 150 pixels for you!",
-            footer: `<a href='https://youtu.be/Gt-5HoqtLGQ'>"If It Don't Fit, Don't Force It" - Kellee Patterson</a>`
-        });
-    }
-    let newRect: Rectangle = new Rectangle(width, height);
-    draw(newRect);
-}
-
-function generateSquare() {
-    let length: number = parseFloat((<HTMLInputElement>document.getElementById('inputSquareSideLength')).value);
-    if (length > 580) {
-        length = 150;
-        Swal.fire({
-            icon: 'error',
-            title: "If It Don't Fit, Don't Force It.",
-            text: "Your square's side length was greater than 580 pixels. We reset it to 150 pixels for you!",
-            footer: `<a href='https://youtu.be/Gt-5HoqtLGQ'>"If It Don't Fit, Don't Force It" - Kellee Patterson</a>`
-        });
-    }
-    let newSquare: Square = new Square(length);
-    draw(newSquare);
-}
-
-function generateCircle() {
-    let radius: number = parseFloat((<HTMLInputElement>document.getElementById('inputCircleRadius')).value);
-    if (radius > 295) {
-        Swal.fire({
-            icon: 'error',
-            title: "It's too big to be a space station.",
-            text: "Your circle's radius was greater than 295 pixels. We reset it to 125 pixels for you!",
-            footer: `<a href='https://youtu.be/Gt-5HoqtLGQ'>"If It Don't Fit, Don't Force It" - Kellee Patterson</a>`
-          });
-        radius = 125;
-    }
-    let newCircle: Circle = new Circle(radius);
-    draw(newCircle);
-}
-
-function generateTriangle() {
-    let height: number = parseFloat((<HTMLInputElement>document.getElementById('inputIsoscelesTriangleHeight')).value);
-    if (height > 580) {
-        height = 150;
-        Swal.fire({
-            icon: 'error',
-            title: "Tri-again!",
-            text: "Your triangle's height was greater than 580 pixels. We reset it to 150 pixels for you!",
-            footer: `<a href='https://youtu.be/Gt-5HoqtLGQ'>"If It Don't Fit, Don't Force It" - Kellee Patterson</a>`
-        });
-    }
-    let newTriangle: Triangle = new Triangle(height);
-    draw(newTriangle);
-}
-
-function draw(shape) {
-    let shapeDiv:HTMLDivElement = document.createElement('div');
-    shapeDiv.id = `${shape.id}`;
-    shapeDiv.className = `shape ${shape.name.toLowerCase()}`;
-    shapeDiv.style.top = `${Math.floor(Math.random() * (600 - 1 - shape.height))}px`;
-    shapeDiv.style.left = `${Math.floor(Math.random() * (600 - 1 - shape.width))}px`;
-
-    if (shape.name === 'Triangle') {
-        shapeDiv.style.borderTop = `${shape.height}px solid yellow`;
-        shapeDiv.style.borderRight = `${shape.height}px solid transparent`;
-    } else {
-        shapeDiv.style.width = `${shape.width}px`;
-        shapeDiv.style.height = `${shape.height}px`;    
+    constructor(width: number, height: number) {
+        super('Square', width, height, undefined);
+        this.width = parseFloat((<HTMLInputElement>document.querySelector('#inputSquareSideLength')).value);
+        this.height = this.width;
+        this.validateShapeDimensions();
     }
 
-    shapeDiv.addEventListener('click', function() { describeShape(shape) });
-    shapeDiv.addEventListener('dblclick', function() { removeShape(shape) });
-    canvas.append(shapeDiv);
-}
-
-function describeShape(shape) {
-    (<HTMLInputElement>document.getElementById('infoShapeName')).value = shape.name;
-    (<HTMLInputElement>document.getElementById('infoShapeID')).value = shape.id;
-    (<HTMLInputElement>document.getElementById('infoWidth')).value = `${shape.width} px`;
-    (<HTMLInputElement>document.getElementById('infoHeight')).value = `${shape.height} px`;
-    (<HTMLInputElement>document.getElementById('infoRadius')).value = (shape.radius) ? `${shape.radius} px` : 'N/A';
-    (<HTMLInputElement>document.getElementById('infoArea')).value = `${shape.area().toLocaleString()} px`;
-    (<HTMLInputElement>document.getElementById('infoPerimeter')).value = `${shape.perimeter().toLocaleString()} px`;
-}
-
-function removeShape(shape) {
-    let shapeID = document.getElementById(shape.id);
-    shapeID.parentElement.removeChild(shapeID);
+    validateShapeDimensions() {
+        if (this.width > 580) {
+            this.width %= 580;
+            this.height = this.width;        
+            Swal.fire({
+                icon: 'error',
+                title: "If It Don't Fit, Don't Force It.",
+                text: "Your square's side length was greater than 580 pixels. We scaled it down for you!",
+                footer: `<a href='https://youtu.be/Gt-5HoqtLGQ'>"If It Don't Fit, Don't Force It" - Kellee Patterson</a>`
+            });
+        }
+        this.drawShapeElement();
+    }
 }
