@@ -169,6 +169,13 @@ var Circle = /** @class */ (function (_super) {
      * dimensions, then it will call the parent `drawShapeElement()` function.
      */
     Circle.prototype.validateShapeDimensions = function () {
+        if (this.radius === null || isNaN(this.radius)) {
+            return Swal.fire({
+                icon: 'error',
+                title: 'Cull the \'null\'.',
+                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
+            });
+        }
         if (this.radius > 295) {
             this.radius %= 295;
             this.width = (this.radius * 2);
@@ -199,8 +206,8 @@ var Triangle = /** @class */ (function (_super) {
      */
     function Triangle(height, width, hypotenuse) {
         var _this = _super.call(this, 'Triangle', width, height, undefined, hypotenuse) || this;
-        _this.width = parseFloat((PageElements.inputIsoscelesTriangleHeight).value);
-        _this.height = _this.width;
+        _this.height = parseFloat((PageElements.inputIsoscelesTriangleHeight).value);
+        _this.width = _this.height;
         _this.hypotenuse = (_this.height * Math.SQRT2);
         _this.validateShapeDimensions();
         return _this;
@@ -226,6 +233,13 @@ var Triangle = /** @class */ (function (_super) {
      * dimensions, then it will call the parent `drawShapeElement()` function.
      */
     Triangle.prototype.validateShapeDimensions = function () {
+        if (this.height === null || isNaN(this.height)) {
+            return Swal.fire({
+                icon: 'error',
+                title: 'Cull the \'null\'.',
+                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
+            });
+        }
         if (this.height > 580) {
             this.height %= 580;
             this.width = this.height;
@@ -267,6 +281,13 @@ var Rectangle = /** @class */ (function (_super) {
      * dimensions, then it will call the parent `drawShapeElement()` function.
      */
     Rectangle.prototype.validateShapeDimensions = function () {
+        if (this.width === null || this.height === null || isNaN(this.width) || isNaN(this.height)) {
+            return Swal.fire({
+                icon: 'error',
+                title: 'Cull the \'null\'.',
+                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
+            });
+        }
         if (this.width > 580 || this.height > 580) {
             this.width %= 580;
             this.height %= 580;
@@ -307,6 +328,13 @@ var Square = /** @class */ (function (_super) {
      * dimensions, then it will call the parent `drawShapeElement()` function.
      */
     Square.prototype.validateShapeDimensions = function () {
+        if (this.width === null || isNaN(this.width)) {
+            return Swal.fire({
+                icon: 'error',
+                title: 'Cull the \'null\'.',
+                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
+            });
+        }
         if (this.width > 580) {
             this.width %= 580;
             this.height = this.width;

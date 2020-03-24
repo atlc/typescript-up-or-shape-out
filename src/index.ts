@@ -168,6 +168,13 @@ class Circle extends Shape {
      * dimensions, then it will call the parent `drawShapeElement()` function.
      */
     validateShapeDimensions() {
+        if (this.radius === null || isNaN(this.radius)) {
+            return Swal.fire({
+                icon: 'error',
+                title: 'Cull the \'null\'.',
+                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
+            });
+        }
         if (this.radius > 295) {
             this.radius %= 295;
             this.width = (this.radius * 2);
@@ -199,8 +206,8 @@ class Triangle extends Shape {
      */
     constructor(height: number, width: number, hypotenuse: number) {
         super('Triangle', width, height, undefined, hypotenuse);
-        this.width = parseFloat((<HTMLInputElement>(PageElements.inputIsoscelesTriangleHeight)).value);
-        this.height = this.width;
+        this.height = parseFloat((<HTMLInputElement>(PageElements.inputIsoscelesTriangleHeight)).value);
+        this.width = this.height;
         this.hypotenuse = (this.height * Math.SQRT2);
         this.validateShapeDimensions();
     }
@@ -228,6 +235,13 @@ class Triangle extends Shape {
      * dimensions, then it will call the parent `drawShapeElement()` function.
      */
     validateShapeDimensions() {
+        if (this.height === null || isNaN(this.height)) {
+            return Swal.fire({
+                icon: 'error',
+                title: 'Cull the \'null\'.',
+                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
+            });
+        }
         if (this.height > 580) {
             this.height %= 580;
             this.width = this.height;
@@ -268,6 +282,14 @@ class Rectangle extends Shape {
      * dimensions, then it will call the parent `drawShapeElement()` function.
      */
     validateShapeDimensions() {
+        if (this.width === null || this.height === null || isNaN(this.width) || isNaN(this.height)) {
+            return Swal.fire({
+                icon: 'error',
+                title: 'Cull the \'null\'.',
+                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
+            });
+        }
+
         if (this.width > 580 || this.height > 580) {
             this.width %= 580;
             this.height %= 580;
@@ -307,6 +329,13 @@ class Square extends Shape {
      * dimensions, then it will call the parent `drawShapeElement()` function.
      */
     validateShapeDimensions() {
+        if (this.width === null || isNaN(this.width)) {
+            return Swal.fire({
+                icon: 'error',
+                title: 'Cull the \'null\'.',
+                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
+            });
+        }
         if (this.width > 580) {
             this.width %= 580;
             this.height = this.width;        
