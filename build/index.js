@@ -26,11 +26,11 @@ var PageElements = /** @class */ (function () {
     PageElements.infoRadius = document.getElementById('infoRadius');
     PageElements.radiusLabel = document.getElementById('radiusLabel');
     PageElements.shapeCanvas = document.getElementById('shapeCanvas');
-    PageElements.inputCircleRadius = document.getElementById('#inputCircleRadius');
-    PageElements.inputIsoscelesTriangleHeight = document.getElementById('#inputIsoscelesTriangleHeight');
-    PageElements.inputRectangleWidth = document.getElementById('#inputRectangleWidth');
-    PageElements.inputRectangleHeight = document.getElementById('#inputRectangleHeight');
-    PageElements.inputSquareSideLength = document.getElementById('#inputSquareSideLength');
+    PageElements.inputCircleRadius = document.getElementById('inputCircleRadius');
+    PageElements.inputIsoscelesTriangleHeight = document.getElementById('inputIsoscelesTriangleHeight');
+    PageElements.inputRectangleWidth = document.getElementById('inputRectangleWidth');
+    PageElements.inputRectangleHeight = document.getElementById('inputRectangleHeight');
+    PageElements.inputSquareSideLength = document.getElementById('inputSquareSideLength');
     return PageElements;
 }());
 /**

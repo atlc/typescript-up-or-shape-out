@@ -11,11 +11,11 @@ class PageElements {
     static infoRadius: HTMLInputElement = <HTMLInputElement>document.getElementById('infoRadius');
     static radiusLabel: HTMLElement = <HTMLLabelElement>document.getElementById('radiusLabel');
     static shapeCanvas: HTMLElement = <HTMLDivElement>document.getElementById('shapeCanvas');
-    static inputCircleRadius: HTMLElement = <HTMLInputElement>document.getElementById('#inputCircleRadius');
-    static inputIsoscelesTriangleHeight: HTMLElement = <HTMLInputElement>document.getElementById('#inputIsoscelesTriangleHeight');
-    static inputRectangleWidth: HTMLElement = <HTMLInputElement>document.getElementById('#inputRectangleWidth');
-    static inputRectangleHeight: HTMLElement = <HTMLInputElement>document.getElementById('#inputRectangleHeight');
-    static inputSquareSideLength: HTMLElement = <HTMLInputElement>document.getElementById('#inputSquareSideLength');
+    static inputCircleRadius: HTMLElement = <HTMLInputElement>document.getElementById('inputCircleRadius');
+    static inputIsoscelesTriangleHeight: HTMLElement = <HTMLInputElement>document.getElementById('inputIsoscelesTriangleHeight');
+    static inputRectangleWidth: HTMLElement = <HTMLInputElement>document.getElementById('inputRectangleWidth');
+    static inputRectangleHeight: HTMLElement = <HTMLInputElement>document.getElementById('inputRectangleHeight');
+    static inputSquareSideLength: HTMLElement = <HTMLInputElement>document.getElementById('inputSquareSideLength');
 }
 
 /**
