@@ -12,7 +12,29 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 /**
- * Definitions of the generic parent shape class.
+ * A class full of static DOM elements that are accessed and updated from within the Shape classes.
+ */
+var PageElements = /** @class */ (function () {
+    function PageElements() {
+    }
+    PageElements.infoShapeName = document.getElementById('infoShapeName');
+    PageElements.infoShapeID = document.getElementById('infoShapeID');
+    PageElements.infoWidth = document.getElementById('infoWidth');
+    PageElements.infoHeight = document.getElementById('infoHeight');
+    PageElements.infoArea = document.getElementById('infoArea');
+    PageElements.infoPerimeter = document.getElementById('infoPerimeter');
+    PageElements.infoRadius = document.getElementById('infoRadius');
+    PageElements.radiusLabel = document.getElementById('radiusLabel');
+    PageElements.shapeCanvas = document.getElementById('shapeCanvas');
+    PageElements.inputCircleRadius = document.getElementById('#inputCircleRadius');
+    PageElements.inputIsoscelesTriangleHeight = document.getElementById('#inputIsoscelesTriangleHeight');
+    PageElements.inputRectangleWidth = document.getElementById('#inputRectangleWidth');
+    PageElements.inputRectangleHeight = document.getElementById('#inputRectangleHeight');
+    PageElements.inputSquareSideLength = document.getElementById('#inputSquareSideLength');
+    return PageElements;
+}());
+/**
+ * Definitions of the generic parent shape class, and the document fields and attributes attached to them.
  */
 var Shape = /** @class */ (function () {
     /**
@@ -58,19 +80,19 @@ var Shape = /** @class */ (function () {
      * Called by the single-click event listener.
      */
     Shape.prototype.describeShape = function () {
-        document.querySelector('#infoShapeName').value = this.name;
-        document.querySelector('#infoShapeID').value = this.uuid;
-        document.querySelector('#infoWidth').value = (this.width) ? this.width + " px" : this.radius * 2 + " px";
-        document.querySelector('#infoHeight').value = (this.height) ? this.height + " px" : this.radius * 2 + " px";
-        document.querySelector('#infoArea').value = this.area().toLocaleString() + " px";
-        document.querySelector('#infoPerimeter').value = this.perimeter().toLocaleString() + " px";
+        PageElements.infoShapeName.value = this.name;
+        PageElements.infoShapeID.value = this.uuid;
+        PageElements.infoWidth.value = (this.width) ? this.width + " px" : this.radius * 2 + " px";
+        PageElements.infoHeight.value = (this.height) ? this.height + " px" : this.radius * 2 + " px";
+        PageElements.infoArea.value = this.area().toLocaleString() + " px";
+        PageElements.infoPerimeter.value = this.perimeter().toLocaleString() + " px";
         if (this.name === 'Triangle') {
-            document.querySelector('#radiusLabel').textContent = "Hypotenuse";
-            document.querySelector('#infoRadius').value = Math.round(this.hypotenuse) + " px";
+            PageElements.radiusLabel.textContent = "Hypotenuse";
+            PageElements.infoRadius.value = Math.round(this.hypotenuse) + " px";
         }
         else {
-            document.querySelector('#radiusLabel').textContent = "Radius";
-            document.querySelector('#infoRadius').value = (this.radius) ? this.radius + " px" : '4 sides can\'t make a circle :(';
+            PageElements.radiusLabel.textContent = "Radius";
+            PageElements.infoRadius.value = (this.radius) ? this.radius + " px" : '4 sides can\'t make a circle :(';
         }
     };
     /**
@@ -93,7 +115,7 @@ var Shape = /** @class */ (function () {
             this.div.style.width = this.width + "px";
             this.div.style.height = this.height + "px";
         }
-        document.querySelector('#shapeCanvas').appendChild(this.div);
+        PageElements.shapeCanvas.appendChild(this.div);
         this.div.addEventListener('click', function () { return _this.describeShape(); });
         this.div.addEventListener('dblclick', function () { return _this.removeShape(); });
     };
@@ -120,7 +142,7 @@ var Circle = /** @class */ (function (_super) {
      */
     function Circle(width, height, radius) {
         var _this = _super.call(this, 'Circle', width, height, radius, undefined) || this;
-        _this.radius = parseFloat(document.querySelector('#inputCircleRadius').value);
+        _this.radius = parseFloat((PageElements.inputCircleRadius).value);
         _this.width = (_this.radius * 2);
         _this.height = (_this.radius * 2);
         _this.validateShapeDimensions();
@@ -177,7 +199,7 @@ var Triangle = /** @class */ (function (_super) {
      */
     function Triangle(height, width, hypotenuse) {
         var _this = _super.call(this, 'Triangle', width, height, undefined, hypotenuse) || this;
-        _this.width = parseFloat(document.querySelector('#inputIsoscelesTriangleHeight').value);
+        _this.width = parseFloat((PageElements.inputIsoscelesTriangleHeight).value);
         _this.height = _this.width;
         _this.hypotenuse = (_this.height * Math.SQRT2);
         _this.validateShapeDimensions();
@@ -232,8 +254,8 @@ var Rectangle = /** @class */ (function (_super) {
      */
     function Rectangle(width, height) {
         var _this = _super.call(this, 'Rectangle', width, height, undefined, undefined) || this;
-        _this.width = parseFloat(document.querySelector('#inputRectangleWidth').value);
-        _this.height = parseFloat(document.querySelector('#inputRectangleHeight').value);
+        _this.width = parseFloat((PageElements.inputRectangleWidth).value);
+        _this.height = parseFloat((PageElements.inputRectangleHeight).value);
         _this.validateShapeDimensions();
         return _this;
     }
@@ -272,7 +294,7 @@ var Square = /** @class */ (function (_super) {
      */
     function Square(width, height) {
         var _this = _super.call(this, 'Square', width, height, undefined, undefined) || this;
-        _this.width = parseFloat(document.querySelector('#inputSquareSideLength').value);
+        _this.width = parseFloat((PageElements.inputSquareSideLength).value);
         _this.height = _this.width;
         _this.validateShapeDimensions();
         return _this;
@@ -305,7 +327,7 @@ var Square = /** @class */ (function (_super) {
  * required values based off what it pulls from the inputs. This was simply done to keep this concise,
  * to avoid what should be class-based functional logic from being created outside the class.
  */
-document.querySelector('#addRectangleButton').addEventListener('click', function () { return new Rectangle(0, 0); });
-document.querySelector('#addSquareButton').addEventListener('click', function () { return new Square(0, 0); });
-document.querySelector('#addCircleButton').addEventListener('click', function () { return new Circle(0, 0, 0); });
-document.querySelector('#addIsocelesButton').addEventListener('click', function () { return new Triangle(0, 0, 0); });
+document.getElementById('addRectangleButton').addEventListener('click', function () { return new Rectangle(0, 0); });
+document.getElementById('addSquareButton').addEventListener('click', function () { return new Square(0, 0); });
+document.getElementById('addCircleButton').addEventListener('click', function () { return new Circle(0, 0, 0); });
+document.getElementById('addIsocelesButton').addEventListener('click', function () { return new Triangle(0, 0, 0); });

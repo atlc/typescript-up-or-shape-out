@@ -1,5 +1,25 @@
 /**
- * Definitions of the generic parent shape class.
+ * A class full of static DOM elements that are accessed and updated from within the Shape classes.
+ */
+class PageElements {
+    static infoShapeName: HTMLInputElement = <HTMLInputElement>document.getElementById('infoShapeName');
+    static infoShapeID: HTMLInputElement = <HTMLInputElement>document.getElementById('infoShapeID');
+    static infoWidth: HTMLInputElement = <HTMLInputElement>document.getElementById('infoWidth');
+    static infoHeight: HTMLInputElement = <HTMLInputElement>document.getElementById('infoHeight');
+    static infoArea: HTMLInputElement = <HTMLInputElement>document.getElementById('infoArea');
+    static infoPerimeter: HTMLInputElement = <HTMLInputElement>document.getElementById('infoPerimeter');
+    static infoRadius: HTMLInputElement = <HTMLInputElement>document.getElementById('infoRadius');
+    static radiusLabel: HTMLElement = <HTMLLabelElement>document.getElementById('radiusLabel');
+    static shapeCanvas: HTMLElement = <HTMLDivElement>document.getElementById('shapeCanvas');
+    static inputCircleRadius: HTMLElement = <HTMLInputElement>document.getElementById('#inputCircleRadius');
+    static inputIsoscelesTriangleHeight: HTMLElement = <HTMLInputElement>document.getElementById('#inputIsoscelesTriangleHeight');
+    static inputRectangleWidth: HTMLElement = <HTMLInputElement>document.getElementById('#inputRectangleWidth');
+    static inputRectangleHeight: HTMLElement = <HTMLInputElement>document.getElementById('#inputRectangleHeight');
+    static inputSquareSideLength: HTMLElement = <HTMLInputElement>document.getElementById('#inputSquareSideLength');
+}
+
+/**
+ * Definitions of the generic parent shape class, and the document fields and attributes attached to them.
  */
 class Shape {
     name: string;
@@ -9,7 +29,7 @@ class Shape {
     height: number;
     radius: number;
     hypotenuse: number;
-
+  
     /**
      * Assigns generic Shape attributes.
      * @param name Only required parameter. Supplied in the constructor of each child constructor.
@@ -57,18 +77,18 @@ class Shape {
      * Called by the single-click event listener.
      */
     describeShape() {
-        (<HTMLInputElement>document.querySelector('#infoShapeName')).value = this.name;
-        (<HTMLInputElement>document.querySelector('#infoShapeID')).value = this.uuid;
-        (<HTMLInputElement>document.querySelector('#infoWidth')).value = (this.width) ? `${this.width} px` : `${this.radius*2} px`;
-        (<HTMLInputElement>document.querySelector('#infoHeight')).value = (this.height) ? `${this.height} px` : `${this.radius*2} px`;
-        (<HTMLInputElement>document.querySelector('#infoArea')).value = `${this.area().toLocaleString()} px`;
-        (<HTMLInputElement>document.querySelector('#infoPerimeter')).value = `${this.perimeter().toLocaleString()} px`;
+        PageElements.infoShapeName.value = this.name;
+        PageElements.infoShapeID.value = this.uuid;
+        PageElements.infoWidth.value = (this.width) ? `${this.width} px` : `${this.radius*2} px`;
+        PageElements.infoHeight.value = (this.height) ? `${this.height} px` : `${this.radius*2} px`;
+        PageElements.infoArea.value = `${this.area().toLocaleString()} px`;
+        PageElements.infoPerimeter.value = `${this.perimeter().toLocaleString()} px`;
         if (this.name === 'Triangle') {
-            document.querySelector('#radiusLabel').textContent = "Hypotenuse";
-            (<HTMLInputElement>document.querySelector('#infoRadius')).value = `${Math.round(this.hypotenuse)} px`;
+            PageElements.radiusLabel.textContent = "Hypotenuse";
+            PageElements.infoRadius.value = `${Math.round(this.hypotenuse)} px`;
         } else {
-            document.querySelector('#radiusLabel').textContent = "Radius";
-            (<HTMLInputElement>document.querySelector('#infoRadius')).value = (this.radius) ? `${this.radius} px` : '4 sides can\'t make a circle :(';
+            PageElements.radiusLabel.textContent = "Radius";
+            PageElements.infoRadius.value = (this.radius) ? `${this.radius} px` : '4 sides can\'t make a circle :(';
         }
     }
 
@@ -92,7 +112,7 @@ class Shape {
             this.div.style.height = `${this.height}px`;    
         }
     
-        document.querySelector('#shapeCanvas').appendChild(this.div);
+        PageElements.shapeCanvas.appendChild(this.div);
         this.div.addEventListener('click', () => this.describeShape());
         this.div.addEventListener('dblclick', () => this.removeShape());
     }
@@ -119,7 +139,7 @@ class Circle extends Shape {
      */
      constructor(width: number, height: number, radius: number) {
         super('Circle', width, height, radius, undefined);
-        this.radius = parseFloat((<HTMLInputElement>document.querySelector('#inputCircleRadius')).value);
+        this.radius = parseFloat((<HTMLInputElement>(PageElements.inputCircleRadius)).value);
         this.width = (this.radius * 2);
         this.height = (this.radius * 2);
         this.validateShapeDimensions();
@@ -179,7 +199,7 @@ class Triangle extends Shape {
      */
     constructor(height: number, width: number, hypotenuse: number) {
         super('Triangle', width, height, undefined, hypotenuse);
-        this.width = parseFloat((<HTMLInputElement>document.querySelector('#inputIsoscelesTriangleHeight')).value);
+        this.width = parseFloat((<HTMLInputElement>(PageElements.inputIsoscelesTriangleHeight)).value);
         this.height = this.width;
         this.hypotenuse = (this.height * Math.SQRT2);
         this.validateShapeDimensions();
@@ -235,8 +255,8 @@ class Rectangle extends Shape {
      */
     constructor(width: number, height: number) {
         super('Rectangle', width, height, undefined, undefined);
-        this.width = parseFloat((<HTMLInputElement>document.querySelector('#inputRectangleWidth')).value);
-        this.height = parseFloat((<HTMLInputElement>document.querySelector('#inputRectangleHeight')).value);
+        this.width = parseFloat((<HTMLInputElement>(PageElements.inputRectangleWidth)).value);
+        this.height = parseFloat((<HTMLInputElement>(PageElements.inputRectangleHeight)).value);
         this.validateShapeDimensions();
     }
 
@@ -274,7 +294,7 @@ class Square extends Shape {
      */
     constructor(width: number, height: number) {
         super('Square', width, height, undefined, undefined);
-        this.width = parseFloat((<HTMLInputElement>document.querySelector('#inputSquareSideLength')).value);
+        this.width = parseFloat((<HTMLInputElement>(PageElements.inputSquareSideLength)).value);
         this.height = this.width;
         this.validateShapeDimensions();
     }
@@ -312,7 +332,7 @@ declare let Swal: any;
  * required values based off what it pulls from the inputs. This was simply done to keep this concise,
  * to avoid what should be class-based functional logic from being created outside the class.
  */
-document.querySelector('#addRectangleButton').addEventListener('click', () =>  new Rectangle(0,0));
-document.querySelector('#addSquareButton').addEventListener('click', () =>  new Square(0,0));
-document.querySelector('#addCircleButton').addEventListener('click', () => new Circle(0,0,0));
-document.querySelector('#addIsocelesButton').addEventListener('click', () =>  new Triangle(0,0,0));
+document.getElementById('addRectangleButton').addEventListener('click', () =>  new Rectangle(0,0));
+document.getElementById('addSquareButton').addEventListener('click', () =>  new Square(0,0));
+document.getElementById('addCircleButton').addEventListener('click', () => new Circle(0,0,0));
+document.getElementById('addIsocelesButton').addEventListener('click', () =>  new Triangle(0,0,0));
