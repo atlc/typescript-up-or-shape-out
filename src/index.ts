@@ -73,6 +73,17 @@ class Shape {
     }
 
     /**
+     * @returns Returns a SweetAlert window with an error notifying the user of the bad input
+     */
+    badInputError(name: string) {
+        return Swal.fire({
+            icon: 'error',
+            title: 'Cull the \'null\'.',
+            text: `You entered null or bad inputs for your ${name.toLowerCase()}, which doesn't quite work. Feel free to try adding some new values though!`
+        });
+    }
+
+    /**
      * Updates the side panel with the contextually current shape's attributes.
      * Called by the single-click event listener.
      */
@@ -169,11 +180,7 @@ class Circle extends Shape {
      */
     validateShapeDimensions() {
         if (this.radius === null || isNaN(this.radius)) {
-            return Swal.fire({
-                icon: 'error',
-                title: 'Cull the \'null\'.',
-                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
-            });
+            return this.badInputError(this.name);
         }
         if (this.radius > 295) {
             this.radius %= 295;
@@ -236,11 +243,7 @@ class Triangle extends Shape {
      */
     validateShapeDimensions() {
         if (this.height === null || isNaN(this.height)) {
-            return Swal.fire({
-                icon: 'error',
-                title: 'Cull the \'null\'.',
-                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
-            });
+            return this.badInputError(this.name);
         }
         if (this.height > 580) {
             this.height %= 580;
@@ -283,11 +286,7 @@ class Rectangle extends Shape {
      */
     validateShapeDimensions() {
         if (this.width === null || this.height === null || isNaN(this.width) || isNaN(this.height)) {
-            return Swal.fire({
-                icon: 'error',
-                title: 'Cull the \'null\'.',
-                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
-            });
+            return this.badInputError(this.name);
         }
 
         if (this.width > 580 || this.height > 580) {
@@ -330,11 +329,7 @@ class Square extends Shape {
      */
     validateShapeDimensions() {
         if (this.width === null || isNaN(this.width)) {
-            return Swal.fire({
-                icon: 'error',
-                title: 'Cull the \'null\'.',
-                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
-            });
+            return this.badInputError(this.name);
         }
         if (this.width > 580) {
             this.width %= 580;

@@ -76,6 +76,16 @@ var Shape = /** @class */ (function () {
         return ((this.width * 2) + (this.height * 2));
     };
     /**
+     * @returns Returns a SweetAlert window with an error notifying the user of the bad input
+     */
+    Shape.prototype.badInputError = function (name) {
+        return Swal.fire({
+            icon: 'error',
+            title: 'Cull the \'null\'.',
+            text: "You entered null or bad inputs for your " + name.toLowerCase() + ", which doesn't quite work. Feel free to try adding some new values though!"
+        });
+    };
+    /**
      * Updates the side panel with the contextually current shape's attributes.
      * Called by the single-click event listener.
      */
@@ -170,11 +180,7 @@ var Circle = /** @class */ (function (_super) {
      */
     Circle.prototype.validateShapeDimensions = function () {
         if (this.radius === null || isNaN(this.radius)) {
-            return Swal.fire({
-                icon: 'error',
-                title: 'Cull the \'null\'.',
-                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
-            });
+            return this.badInputError(this.name);
         }
         if (this.radius > 295) {
             this.radius %= 295;
@@ -234,11 +240,7 @@ var Triangle = /** @class */ (function (_super) {
      */
     Triangle.prototype.validateShapeDimensions = function () {
         if (this.height === null || isNaN(this.height)) {
-            return Swal.fire({
-                icon: 'error',
-                title: 'Cull the \'null\'.',
-                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
-            });
+            return this.badInputError(this.name);
         }
         if (this.height > 580) {
             this.height %= 580;
@@ -282,11 +284,7 @@ var Rectangle = /** @class */ (function (_super) {
      */
     Rectangle.prototype.validateShapeDimensions = function () {
         if (this.width === null || this.height === null || isNaN(this.width) || isNaN(this.height)) {
-            return Swal.fire({
-                icon: 'error',
-                title: 'Cull the \'null\'.',
-                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
-            });
+            return this.badInputError(this.name);
         }
         if (this.width > 580 || this.height > 580) {
             this.width %= 580;
@@ -329,11 +327,7 @@ var Square = /** @class */ (function (_super) {
      */
     Square.prototype.validateShapeDimensions = function () {
         if (this.width === null || isNaN(this.width)) {
-            return Swal.fire({
-                icon: 'error',
-                title: 'Cull the \'null\'.',
-                text: 'You entered null or bad inputs, which doesn\'t cut it with us. Feel free to try adding some values though!'
-            });
+            return this.badInputError(this.name);
         }
         if (this.width > 580) {
             this.width %= 580;
